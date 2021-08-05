@@ -1,4 +1,4 @@
-const PARTICIPANTS_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol[/participants](https://mock-api.bootcamp.respondeai.com.br/api/v2/uol/participants)";
+const PARTICIPANTS_URL = "";
 const MESSAGES_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
 const STATUS_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/status";
 
