@@ -6,26 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="assets/Images/Logouou.png">
     <title>ChatUOU</title>
 </head>
 <body>
-    <header class="header">
+    <header class="header suma">
         <figure class="logo">
             <img src="assets/Images/Logouou.png" alt="logo da UOL">
         </figure>
         <ion-icon class="icon-header" name="people"></ion-icon>
     </header>
-    <main>
-        <div class="status-message style-all-message">
-            <p class="mensagem"><span class="timer">(09:21:45)</span> <strong>João</strong> entra na sala...</p>
-        </div>
-        <div class="user-for-all style-all-message">
-            <p class="mensagem"><span class="timer">(09:22:28)</span> <strong>João</strong> para <strong>Todos</strong>: Bom dia</p>
-        </div>
-        <div class="private-message style-all-message">
-            <p class="mensagem"><span class="timer">(09:22:48)</span> <strong>João</strong> reservadamente para <strong>Maria</strong>: Oi gatinha quer tc?</p>
+    
+    <main class="content">
+        <div class="visibility">
+            <div class="form-user-name">
+                <figure>
+                    <img class="logo-form" src="assets/Images/Logouou.png" alt="logo da UOL">
+                </figure>
+                <!-- <textarea class="user-name" placeholder=">Digite seu nome"></textarea> -->
+                <input type="text" class="user-name" placeholder="Digite seu nome">
+                <button onclick="entrar();">Entrar</button>
+            </div>
         </div>
     </main>
+    <div class="fixed-send-message suma">
+        <textarea>Escreva aqui..</textarea>
+        <ion-icon class="icon-send-message " name="paper-plane-outline"></ion-icon>
+    </div>
 
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

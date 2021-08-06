@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap');
+
 *{
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
@@ -28,7 +29,6 @@ header ion-icon{
     justify-content: space-between;
     align-items: center;
     height: 80px;
-    background-color: gray;
 }
 .icon-header,
 .logo{
@@ -40,20 +40,85 @@ header ion-icon{
     flex-direction: column;
     justify-content: center;
     height: 40px;
+    margin-bottom: 5px;
 }
 .status-message{
     background-color: #DCDCDC;
 }
-.user-for-all{
+.normal-message{
     background-color: #FFFFFF;
 }
-.private-message{
+.private_message-message{
     background-color: #FFDEDE;
 }
 .mensagem{
-    margin: 10px
+    margin: 10px;
 }
 span{
     color: gray;
 }
 /* Fim dos tipos de mensagens */
+
+.content{
+    background-color: #F3F3F3;
+}
+
+/* barra fixa de mandar msg */
+
+.fixed-send-message{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    width: 100%;
+}
+textarea{
+    height: 50%;
+    margin: 0 25px;
+    border: none;
+    font-style: italic;
+    font-size: 18px;
+}
+.icon-send-message{
+    margin: 0 25px;
+    height: 26px;
+    width: 26px;
+}
+
+.suma{
+    display: none;
+}
+.form-user-name{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.user-name{
+    width: 261px;
+    height: 58px;
+    text-align:center;
+    border-radius: 5px;
+    border: 1px solid #D7D7D7;
+    font-size: 18px;
+    margin: 50px 0px 10px 0px;
+    /* color: #AEAEAE; */
+}
+
+button{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    border: none;
+    border-radius: 9px;
+    background-color: #E7E7E7;
+    color: #696969;
+    height: 45px;
+    width: 109px;
+}
+
+.logo-form{
+    height: 92px; 
+}
