@@ -10,15 +10,36 @@
     <title>ChatUOU</title>
 </head>
 <body>
-    <header class="header suma">
+    <div class="pretona">
+        <div class="side-bar">
+            <div class="alinhamento">
+            <p class="section-p">Escolha um contato
+para enviar mensagem:</p>
+            </div>
+            <ul>
+                <li onclick="choicePeople(this)"><ion-icon name="people"></ion-icon>Todos</li>
+                <li onclick="choicePeople(this)"><ion-icon name="person-circle-sharp"></ion-icon>Elll chapolin</li>
+                <li onclick="choicePeople(this)"><ion-icon name="person-circle-sharp"></ion-icon>Maria</li>
+            </ul>
+            <div class="alinhamento">
+                    <p class="section-p">Escolha a visibilidade:</p>  
+            </div>
+            <ul class="visibilidade">
+                <li class="linha" onclick="choiceVisibily(this)"><ion-icon name="lock-open"></ion-icon>Público <ion-icon class="check desaparecido" name="checkmark-sharp"></ion-icon></li>
+                <li class="linha" onclick="choiceVisibily(this)"><ion-icon name="lock-closed"></ion-icon>Reservadamente<ion-icon class="check desaparecido" name="checkmark-sharp"></ion-icon></li>
+            </ul>
+        </div>   
+    </div> 
+    <!-- suma -->
+    <header class="header "> 
         <figure class="logo">
             <img src="assets/Images/Logouou.png" alt="logo da UOL">
         </figure>
         <ion-icon class="icon-header" name="people"></ion-icon>
     </header>
-    
-    <main class="content">
-        <div class="visibility">
+    <!-- suma -->
+    <main class="content ">
+        <div class="visibility suma">
             <div class="form-user-name">
                 <figure>
                     <img class="logo-form" src="assets/Images/Logouou.png" alt="logo da UOL">
@@ -29,11 +50,11 @@
             </div>
         </div>
     </main>
-    <div class="fixed-send-message suma">
-        <textarea>Escreva aqui..</textarea>
-        <ion-icon class="icon-send-message " name="paper-plane-outline"></ion-icon>
+    <!-- suma -->
+    <div class="fixed-send-message ">
+        <textarea placeholder="Escreva aqui..."></textarea>
+        <ion-icon onclick="enviarMensagem();" class="icon-send-message" name="paper-plane-outline"></ion-icon>
     </div>
-
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

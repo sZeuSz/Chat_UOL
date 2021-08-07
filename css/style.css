@@ -39,8 +39,9 @@ header ion-icon{
     display: flex;
     flex-direction: column;
     justify-content: center;
-    height: 40px;
+    height: auto;
     margin-bottom: 5px;
+    overflow-wrap: break-word;
 }
 .status-message{
     background-color: #DCDCDC;
@@ -121,4 +122,63 @@ button{
 
 .logo-form{
     height: 92px; 
+}
+/* Side-bar + Darkness */
+.pretona{
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background-color:rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+.section-p {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.side-bar{
+    margin: 0 0 0 32%;
+    background-color: #FFFFFF;
+    width: 68%;
+    height: 100%;
+}
+
+.alinhamento{
+    padding-top: 25px;
+    margin: 0 auto;
+    width: 70%;
+    text-align: center;
+}
+ul{
+    margin-top: 15px;
+    font-size: 16px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    /* background-color: blue; */
+}
+
+li{
+    overflow-wrap: break-word;
+}
+
+li ion-icon{
+    height: 25px;
+    margin: 0 10px;
+    vertical-align: middle
+}
+
+.linha.selecionada .check.desaparecido{
+    opacity: 1;
+}
+
+.linha .check{
+    align-items: center;
+    height: 25px;
+    margin: 0 10px;
+    vertical-align: middle;
+    color: #28BB25;
+    --ionicon-stroke-width: 125px;
+    opacity: 0;
 }
