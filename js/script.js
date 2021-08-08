@@ -58,6 +58,9 @@ function tratarSucesso(answer){
 
 function entrar(){
     // console.log("entroouu")
+    const button = document.querySelector(".button").classList.toggle("suma");
+    const input = document.querySelector(".user-name").classList.toggle("suma");
+    const carregando = document.querySelector(".loading").classList.toggle("suma");
     name_input = document.querySelector(".user-name").value;
     const promise = axios.post(PARTICIPANTS_URL, {name: name_input})
     promise.then(entrouComSucesso);
@@ -73,6 +76,7 @@ function entrouComSucesso(resposta){
     //box_message = document.querySelector("textarea");
 
     rendezirarChat();
+    usersActive();
 
     setInterval(function(){
         rendezirarChat();
@@ -81,6 +85,12 @@ function entrouComSucesso(resposta){
     setInterval(function(){
         manterOnline();
     }, 5000)
+
+    setInterval(function(){
+        usersActive();
+    }, 10000)
+
+
 }
 function erroAoEntrar(error){
     console.log(error.response.status)
@@ -161,9 +171,7 @@ function enviouComSucesso(){
 function erroAoEnviar(erro){
     console.log(erro.response.status);
     console.log("erro ao enviar essa mensagem, desconectado");
-    // setTimeout(() => {
-    //     window.location.reload()
-    // }, 2000);
+    window.location.reload()
 }
 
 
@@ -209,8 +217,6 @@ function openSideBar(){
     darkness.classList.remove("suma");
     sideBar.classList.remove("suma");
     visibility.classList.remove("suma");
-
-    usersActive();
 }
 
 
@@ -272,3 +278,12 @@ function showInforMessage(user, type_message){
         infoVisibility.innerText = `Enviando para Todos (${type_message})`
     }
 }
+
+var texto = document.querySelector("textarea");
+texto.addEventListener('focus', function() {
+    texto.addEventListener('keydown', function (event) {
+        if (event.keyCode === 13){
+            enviarMensagem();
+        }
+    });
+});

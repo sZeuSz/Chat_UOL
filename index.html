@@ -43,15 +43,20 @@
                     <img class="logo-form" src="assets/Images/Logouou.png" alt="logo da UOL">
                 </figure>
                 <!-- <textarea class="user-name" placeholder=">Digite seu nome"></textarea> -->
+                
                 <input type="text" class="user-name" placeholder="Digite seu nome">
-                <button onclick="entrar();">Entrar</button>
+                <button class="button" onclick="entrar();">Entrar</button>
+                <figure class="loading suma">
+                    <img class="loading-gif" src="assets/Images/loading.gif" alt="gif de carregamento">
+                    <figcaption>Entrando...</figcaption>
+                </figure>
             </div>
         </div>
     </main>
     <!-- suma -->
     <div class="fixed-send-message suma">
         <div class="message-and-send">
-            <textarea placeholder="Escreva aqui..."></textarea>
+            <textarea id="texto" placeholder="Escreva aqui..."></textarea>
             <ion-icon onclick="enviarMensagem();" class="icon-send-message" name="paper-plane-outline"></ion-icon>
         </div>
         <p class="info-visibility suma">Enviando para Todos (Público)</p>
