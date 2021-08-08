@@ -1,8 +1,10 @@
 const PARTICIPANTS_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants"
 const MESSAGES_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
 const STATUS_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/status";
-
 const box_message = document.querySelector("textarea");
+
+let people;
+let type_message;
 let name_input;
 function rendezirarChat(){
 
@@ -129,21 +131,81 @@ function erroAoEnviar(erro){
 
 function choicePeople(elemento){
     console.log("Escolhi um caba");
-    console.log(elemento)
+    let selecionado = document.querySelector(".peoples .linha.selecionada") 
+    
+    if(selecionado !== null){
+        selecionado = document.querySelector(".peoples .linha.selecionada .check").classList.remove("desaparecido");
+            document.querySelector(".peoples .linha.selecionada").classList.remove("selecionada");
+    }
+    elemento.classList.add("selecionada");
+    selecionado = document.querySelector(".peoples .linha.selecionada .check").classList.add("desaparecido") 
+
+    // console.log(elemento.innerText)
+    people = elemento.innerText;
 }
 
 function choiceVisibily(elemento){
     console.log("Escolhi um status");   
     
-    let selecionado = document.querySelector(".linha.selecionada") 
+    let selecionado = document.querySelector(".visibility .linha.selecionada") 
 
     console.log(selecionado )
     
     if(selecionado !== null){
-        selecionado = document.querySelector(".linha.selecionada .check").classList.remove("desaparecido");
-            document.querySelector(".linha.selecionada").classList.remove("selecionada");
+        selecionado = document.querySelector(".visibility .linha.selecionada .check").classList.remove("desaparecido");
+            document.querySelector(".visibility .linha.selecionada").classList.remove("selecionada");
     }
     elemento.classList.add("selecionada");
-    selecionado = document.querySelector(".linha.selecionada .check").classList.add("desaparecido") 
-    
+    selecionado = document.querySelector(".visibility .linha.selecionada .check").classList.add("desaparecido") 
+    console.log(elemento.innerText);
+    type_message = elemento.innerText;
 }   
+
+
+function openSideBar(){
+    const darkness = document.querySelector(".darkness")
+    const sideBar = document.querySelector(".side-bar")
+    darkness.classList.remove("suma")
+    sideBar .classList.remove("suma")
+}
+
+
+function usersActive(){
+    console.log("ôvo deixar os usuarios online aqui na side, wait")
+
+    const promise = axios.get(PARTICIPANTS_URL);
+    promise.then(sucessoAoBuscarUsers);
+    promise.catch(falhaAoBuscarUsers);
+}
+
+function sucessoAoBuscarUsers(answer){
+    console.log("deu");
+
+    let listUsersActives = document.querySelector(".peoples");
+    listUsersActives.innerHTML = `<li class="linha" onclick="choicePeople(this)"><ion-icon name="people"></ion-icon>Todos <ion-icon class="check desaparecido" name="checkmark-outline"></ion-icon></li>`;
+
+    console.log(listUsersActives);
+
+    console.log(answer.data)
+
+    for(let i = 0; i < answer.data.length; i++){
+
+        listUsersActives.innerHTML += `<li class="linha" onclick="choicePeople(this)"><ion-icon name="people"></ion-icon>${answer.data[i].name} <ion-icon class="check desaparecido" name="checkmark-outline"></ion-icon></li>`
+    }
+}
+
+function falhaAoBuscarUsers(error){
+    console.log("Ops! Ocorreu o um erro no servidor, estamos consertando isso.");
+    console.log(eŕror)
+}
+
+usersActive();
+
+function closeSideBar(){
+    const sideBar = document.querySelector(".side-bar");
+    const header = document.querySelector(".header");
+    const darkness = document.querySelector(".darkness")
+    darkness.classList.add("suma");
+    sideBar.classList.add("suma");
+
+}
