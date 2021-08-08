@@ -10,8 +10,8 @@
     <title>ChatUOU</title>
 </head>
 <body>
-    <div class="darkness" onclick="closeSideBar();"></div> 
-    <div class="side-bar">
+    <div class="darkness suma" onclick="closeSideBar();"></div> 
+    <div class="side-bar suma">
             <div class="alinhamento">
                 <p class="section-p">Escolha um contato para enviar mensagem:</p>
             </div>
@@ -29,15 +29,15 @@
             </ul>
     </div>   
     <!-- suma -->
-    <header class="header"> 
+    <header class="header suma"> 
         <figure class="logo">
             <img src="assets/Images/Logouou.png" alt="logo da UOL">
         </figure>
         <ion-icon class="icon-header" name="people" onclick="openSideBar();"></ion-icon>
     </header>
     <!-- suma -->
-    <main class="content ">
-        <div class="visibility suma">
+    <main class="content">
+        <div class="visibility">
             <div class="form-user-name">
                 <figure>
                     <img class="logo-form" src="assets/Images/Logouou.png" alt="logo da UOL">
@@ -49,12 +49,12 @@
         </div>
     </main>
     <!-- suma -->
-    <div class="fixed-send-message ">
+    <div class="fixed-send-message suma">
         <div class="message-and-send">
             <textarea placeholder="Escreva aqui..."></textarea>
             <ion-icon onclick="enviarMensagem();" class="icon-send-message" name="paper-plane-outline"></ion-icon>
         </div>
-        <p class="info-visibility">Enviando para Maria (reservadamente)</p>
+        <p class="info-visibility suma">Enviando para Todos (Público)</p>
     </div>
     <script nomodule src="https://unpkg.com/ionicons@5.4.0/dist/ionicons/ionicons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>

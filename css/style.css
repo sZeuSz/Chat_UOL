@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap');
 *{
     box-sizing: border-box;
     font-family: 'Roboto', sans-serif;
@@ -66,8 +65,11 @@ span{
 
 .content{
     padding-top: 105px;
+    height: 100vh;
+    overflow-y: scroll;
     padding-bottom: 80px;
     background-color: #F3F3F3;
+    overflow-y: scroll;
 }
 
 /* barra fixa de mandar msg */
@@ -86,11 +88,14 @@ span{
     z-index: 1;
 }
 textarea{
-    height: 50%;
+    height: 60%;
     margin: 0 25px;
     border: none;
     font-style: italic;
     font-size: 18px;
+}
+textarea::placeholder{
+    color:black;
 }
 .icon-send-message{
     margin: 0 25px;
@@ -104,9 +109,9 @@ textarea{
 .form-user-name{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content:start;
     align-items: center;
-    height: 100vh;
+    height: 100%;
 }
 
 .user-name{
@@ -211,5 +216,17 @@ li ion-icon{
 }
 
 .message-and-send{
-    
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-visibility{
+    /* margin-top: 5px; */
+    margin-left: 26px;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    font-style: normal;
+    color: #696969;
 }

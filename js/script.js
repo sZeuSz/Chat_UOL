@@ -1,10 +1,9 @@
 const PARTICIPANTS_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/participants"
 const MESSAGES_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages";
 const STATUS_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/status";
-const box_message = document.querySelector("textarea");
 
-let people;
-let type_message;
+let people = "";
+let type_message = "";
 let name_input;
 function rendezirarChat(){
 
@@ -22,6 +21,7 @@ function tratarSucesso(answer){
     // console.log(mensagens_atualizadas[0].text);
 
     const lista_de_mensagens = document.querySelector(".content");
+    
 
     lista_de_mensagens.innerHTML = "";
     
@@ -39,10 +39,20 @@ function tratarSucesso(answer){
                                             <p class="mensagem"><span class="timer">(${mensagens_atualizadas[i].time})</span> <strong>${mensagens_atualizadas[i].from}</strong> para <strong>${mensagens_atualizadas[i].to}</strong>: ${mensagens_atualizadas[i].text}</p>
                                          </div>`
         }
+        else if(mensagens_atualizadas[i].type === "private_message"){
+            if(mensagens_atualizadas[i].from === name_input || mensagens_atualizadas[i].to === name_input){
+                lista_de_mensagens.innerHTML += `<div class="${mensagens_atualizadas[i].type}-message style-all-message">
+                                            <p class="mensagem"><span class="timer">(${mensagens_atualizadas[i].time})</span> <strong>${mensagens_atualizadas[i].from}</strong> para <strong>${mensagens_atualizadas[i].to}</strong>: ${mensagens_atualizadas[i].text}</p>
+                                         </div>`
+            }
+        }
     }
+
+    const box_message = document.querySelector('.content div:last-child');
+
     box_message.scrollIntoView(true);
 }
-rendezirarChat();
+// rendezirarChat();
 
 
 
@@ -60,12 +70,13 @@ function entrouComSucesso(resposta){
     document.querySelector(".visibility").classList.toggle("suma");
     document.querySelector(".header").classList.toggle("suma");
     document.querySelector(".fixed-send-message").classList.toggle("suma");
+    //box_message = document.querySelector("textarea");
 
     rendezirarChat();
 
     setInterval(function(){
         rendezirarChat();
-    }, 3500)
+    }, 3000)
 
     setInterval(function(){
         manterOnline();
@@ -97,18 +108,46 @@ function manteveComNaoSucesso(error){
 
 function enviarMensagem(){
     
-    let message = document.querySelector("textarea").value;
+    let message = document.querySelector("textarea");
 
-    const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages", {
-        from: name_input,
-        to: "Todos",
-        text: message,
-        type: "message"
-    });
+    let inforMessage;
 
-    console.log(box_message.value);
+    if(people !== "" && type_message === "Reservadamente"){
+        inforMessage = {
+            from: name_input,
+            to: people,
+            text: message.value,
+            type: "private_message"
+        }
+    }
+    else if(people !== "" && type_message === "Público"){
+        inforMessage = {
+            from: name_input,
+            to: people,
+            text: message.value,
+            type: "message"
+        }
+    }
+    else if(people === "" && type_message !== ""){
+        inforMessage = {
+            from: name_input,
+            to: "Todos",
+            text: message.value,
+            type: type_message  
+        }
+    }
+    else{
+        inforMessage = {
+            from: name_input,
+            to: "Todos",
+            text: message.value,
+            type: "message"     
+        }
+    }
 
-    box_message.value = "";
+    const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages", inforMessage);
+
+    message.value = "";
     
     promise.then(enviouComSucesso);
     promise.catch(erroAoEnviar);
@@ -116,6 +155,7 @@ function enviarMensagem(){
 
 function enviouComSucesso(){
     console.log("mensagem, enviada");
+    
     rendezirarChat();
 }
 function erroAoEnviar(erro){
@@ -165,8 +205,12 @@ function choiceVisibily(elemento){
 function openSideBar(){
     const darkness = document.querySelector(".darkness")
     const sideBar = document.querySelector(".side-bar")
-    darkness.classList.remove("suma")
-    sideBar .classList.remove("suma")
+    const visibility = document.querySelector(".visibility")
+    darkness.classList.remove("suma");
+    sideBar.classList.remove("suma");
+    visibility.classList.remove("suma");
+
+    usersActive();
 }
 
 
@@ -192,6 +236,7 @@ function sucessoAoBuscarUsers(answer){
 
         listUsersActives.innerHTML += `<li class="linha" onclick="choicePeople(this)"><ion-icon name="people"></ion-icon>${answer.data[i].name} <ion-icon class="check desaparecido" name="checkmark-outline"></ion-icon></li>`
     }
+    
 }
 
 function falhaAoBuscarUsers(error){
@@ -199,7 +244,7 @@ function falhaAoBuscarUsers(error){
     console.log(eŕror)
 }
 
-usersActive();
+// usersActive();
 
 function closeSideBar(){
     const sideBar = document.querySelector(".side-bar");
@@ -207,5 +252,23 @@ function closeSideBar(){
     const darkness = document.querySelector(".darkness")
     darkness.classList.add("suma");
     sideBar.classList.add("suma");
+    
+    showInforMessage(people, type_message);
+}
 
+function showInforMessage(user, type_message){
+    const infoVisibility = document.querySelector(".info-visibility");
+
+    infoVisibility.classList.remove("suma");
+
+    // console.log(infoVisibility.innerText);
+    if(user !== "" && type_message !== ""){
+        infoVisibility.innerText = `Enviando para ${user} (${type_message})`
+    }
+    else if(user !== "" && type_message === ""){
+        infoVisibility.innerText = `Enviando para ${user} (Público)`
+    }
+    else if(user === "" && type_message !== ""){
+        infoVisibility.innerText = `Enviando para Todos (${type_message})`
+    }
 }
