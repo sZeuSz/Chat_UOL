@@ -194,6 +194,8 @@ function sendMessage(){
             promise.catch(sendMessageError);
         }
         message.value = "";
+
+        return;
     }
     else if(people !== "" && type_message === "Reservadamente"){
         inforMessage = {
