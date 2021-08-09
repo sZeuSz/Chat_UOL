@@ -91,6 +91,7 @@ textarea{
     border: none;
     font-style: italic;
     font-size: 18px;
+    outline: 0;
 }
 textarea::placeholder{
     color:black;
@@ -134,7 +135,9 @@ textarea::placeholder{
     height: 45px;
     width: 109px;
 }
-
+input{
+    outline: 0;
+}
 .logo-form{
     height: 92px; 
 }
