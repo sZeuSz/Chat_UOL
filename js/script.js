@@ -6,14 +6,15 @@ let people = "";
 let type_message = "";
 let name_input;
 let last_message;
+let users_active = [];
 
-function rendezirarChat(){
+function renderChat(){
 
     const promise = axios.get(MESSAGES_URL);
 
-    promise.then(tratarSucesso);
+    promise.then(renderChatSucess);
 }
-function tratarSucesso(answer){
+function renderChatSucess(answer){
     const mensagens_atualizadas = answer.data;
 
     const lista_de_mensagens = document.querySelector(".content");
@@ -76,11 +77,11 @@ function registerUserSucess(){
     document.querySelector(".header").classList.toggle("suma");
     document.querySelector(".fixed-send-message").classList.toggle("suma");
 
-    rendezirarChat();
+    renderChat();
     usersActive();
 
     setInterval(function(){
-        rendezirarChat();
+        renderChat();
     }, 3000)
 
     setInterval(function(){
@@ -179,8 +180,22 @@ function sendMessage(){
     }
 
     let inforMessage;
+    if(people === "Todos" && type_message === "Reservadamente"){
+        for(let i = 0; i < users_active.length; i++){
+            inforMessage = {
+                from: name_input,
+                to: users_active[i].name,
+                text: message.value,
+                type: "private_message"
+            }
 
-    if(people !== "" && type_message === "Reservadamente"){
+            const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/messages", inforMessage);            
+            promise.then(sendMessageSuccess);
+            promise.catch(sendMessageError);
+        }
+        message.value = "";
+    }
+    else if(people !== "" && type_message === "Reservadamente"){
         inforMessage = {
             from: name_input,
             to: people,
@@ -232,7 +247,7 @@ function sendMessage(){
 function sendMessageSuccess(){
     let message = document.querySelector("textarea");
     message.value = "";
-    rendezirarChat();
+    renderChat();
 }
 function sendMessageError(erro){
     alert("erro ao enviar essa mensagem, desconectado");
@@ -355,6 +370,8 @@ function usersActive(){
 }
 
 function usersActiveSucess(answer){
+    users_active = answer.data;
+
     let listUsersActives = document.querySelector(".peoples");
 
     listUsersActives.innerHTML = `<li class="linha padrao" onclick="choicePeople(this)"><ion-icon name="people"></ion-icon>Todos <ion-icon class="check desaparecido" name="checkmark-outline"></ion-icon></li>`;
