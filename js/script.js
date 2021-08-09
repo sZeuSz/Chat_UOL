@@ -43,12 +43,11 @@ function tratarSucesso(answer){
         }
     }    
 
-    let box_message = document.querySelector(".style-all-message:nth-last-child(-n+1) p:nth-last-child(-n+1)");
-    console.log(box_message.innerHTML);
-    console.log(last_message);
-    console.log(box_message === last_message)
+    let box_message = document.querySelector(".style-all-message:nth-last-child(-n+1) p:nth-last-child(-n+1)").innerText;
+    
     if(box_message !== last_message){
-        last_message = box_message.innerHTML;
+        last_message = box_message;
+        box_message = document.querySelector(".style-all-message:nth-last-child(-n+1) p:nth-last-child(-n+1)");
         box_message.scrollIntoView(true);
     }
 }
