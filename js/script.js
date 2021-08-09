@@ -73,9 +73,9 @@ function registerUser(){
 }
 
 function registerUserSucess(){
+    document.querySelector(".fixed-send-message").classList.toggle("suma");
     document.querySelector(".visibility").classList.toggle("suma");
     document.querySelector(".header").classList.toggle("suma");
-    document.querySelector(".fixed-send-message").classList.toggle("suma");
 
     renderChat();
     usersActive();
@@ -95,6 +95,9 @@ function registerUserSucess(){
 
 function registerUserError(error){
     if(error.response.status === 400){
+        const button = document.querySelector(".button").classList.toggle("suma");
+        const input = document.querySelector(".user-name").classList.toggle("suma");
+        const carregando = document.querySelector(".loading").classList.toggle("suma");
         alert("Nome de usuário já existe")
     }
 }
@@ -414,6 +417,8 @@ function showInforMessage(user, type_message){
         infoVisibility.innerText = `Enviando para Todos (${type_message})`;
     }
 }
+
+/*Permitindo entrar e enviar mensagem usando o Enter */
 
 let texto = document.querySelector("textarea");
 texto.addEventListener('keydown', function(e){
