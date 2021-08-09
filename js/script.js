@@ -62,9 +62,9 @@ function registerUser(){
         return;
     }
 
-    const button = document.querySelector(".button").classList.toggle("suma");
-    const input = document.querySelector(".user-name").classList.toggle("suma");
-    const carregando = document.querySelector(".loading").classList.toggle("suma");
+    document.querySelector(".button").classList.toggle("suma");
+    document.querySelector(".user-name").classList.toggle("suma");
+    document.querySelector(".loading").classList.toggle("suma");
 
     const promise = axios.post(PARTICIPANTS_URL, {name: name_input})
 
@@ -73,11 +73,13 @@ function registerUser(){
 }
 
 function registerUserSucess(){
+    document.querySelector(".form-user-name").classList.toggle("suma");
     document.querySelector(".fixed-send-message").classList.toggle("suma");
     document.querySelector(".visibility").classList.toggle("suma");
     document.querySelector(".header").classList.toggle("suma");
 
     renderChat();
+
     usersActive();
 
     setInterval(function(){
