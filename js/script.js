@@ -5,6 +5,8 @@ const STATUS_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/statu
 let people = "";
 let type_message = "";
 let name_input;
+let last_message;
+let cont = 0;
 
 function rendezirarChat(){
 
@@ -16,6 +18,8 @@ function tratarSucesso(answer){
     const mensagens_atualizadas = answer.data;
 
     const lista_de_mensagens = document.querySelector(".content");
+
+    last_message = document.querySelector('.content div:last-child');
     
 
     lista_de_mensagens.innerHTML = "";
@@ -35,31 +39,41 @@ function tratarSucesso(answer){
         else if(mensagens_atualizadas[i].type === "private_message"){
             if(mensagens_atualizadas[i].from === name_input || mensagens_atualizadas[i].to === name_input){
                 lista_de_mensagens.innerHTML += `<div class="${mensagens_atualizadas[i].type}-message style-all-message">
-                                            <p class="mensagem"><span class="timer">(${mensagens_atualizadas[i].time})</span> <strong>${mensagens_atualizadas[i].from}</strong> para <strong>${mensagens_atualizadas[i].to}</strong>: ${mensagens_atualizadas[i].text}</p>
+                                            <p class="mensagem"><span class="timer">(${mensagens_atualizadas[i].time})</span> reservadamente<strong>${mensagens_atualizadas[i].from}</strong> para <strong>${mensagens_atualizadas[i].to}</strong>: ${mensagens_atualizadas[i].text}</p>
                                          </div>`
             }
         }
     }
 
-    const box_message = document.querySelector('.content div:last-child');
-
-    box_message.scrollIntoView(true);
+    if(answer.data[answer.data.length - 1] !== last_message || last_message === null){
+        box_message = document.querySelector('.content div:last-child');
+        box_message.scrollIntoView(true);
+        last_message = box_message;
+    }
 }
 
 
+/*Start register user functions */
 
-function entrar(){
+function registerUser(){
+    name_input = document.querySelector(".user-name").value;
+
+    if(!isValidName(name_input)){
+        alert("Nome de usuário invalido")
+        return;
+    }
+
     const button = document.querySelector(".button").classList.toggle("suma");
     const input = document.querySelector(".user-name").classList.toggle("suma");
     const carregando = document.querySelector(".loading").classList.toggle("suma");
-    name_input = document.querySelector(".user-name").value;
-    const promise = axios.post(PARTICIPANTS_URL, {name: name_input})
-    promise.then(entrouComSucesso);
-    promise.catch(erroAoEntrar);
 
+    const promise = axios.post(PARTICIPANTS_URL, {name: name_input})
+
+    promise.then(registerUserSucess);
+    promise.catch(registerUserError);
 }
 
-function entrouComSucesso(resposta){
+function registerUserSucess(){
     document.querySelector(".visibility").classList.toggle("suma");
     document.querySelector(".header").classList.toggle("suma");
     document.querySelector(".fixed-send-message").classList.toggle("suma");
@@ -72,41 +86,101 @@ function entrouComSucesso(resposta){
     }, 3000)
 
     setInterval(function(){
-        manterOnline();
+        keepActiveStatus();
     }, 5000)
 
     setInterval(function(){
         usersActive();
     }, 10000)
-
-
 }
-function erroAoEntrar(error){
-    console.log(error.response.status)
+
+function registerUserError(error){
     if(error.response.status === 400){
         alert("Nome de usuário já existe")
     }
 }
 
+function isValidName(name_input){
+    let is = 0;
+    let left = name_input.indexOf('<');
+    let right = name_input.indexOf('>');
 
-function manterOnline(){
+    if(name_input[0] === "<" && name_input[name_input.length - 1] === ">" && name_input[0] === "<" && name_input[1] !== " "){
+        return is;
+    }
+
+    if(left !== -1 && right !== -1){
+        console.log("Esquerda pa direita")
+        for(let i = 0; i < left; i++){
+            console.log(name_input[i])
+            if(name_input[i] !== " "){
+                is = 1;
+            }
+        }
+        console.log("Direita pa direita")
+        for(let i = right + 1; i < name_input.length; i++){
+            console.log(name_input[i])
+            if(name_input[i] !== " "){
+                is = 1;
+            }
+        }
+
+        if(!is && name_input[left + 1] === " "){
+            for(let i = 0; i < name_input.length; i++){
+                if(name_input[i] !== " "){
+                    is = 1;
+                }
+            }
+        }
+    }
+    else if(left !== -1 && right === -1){
+        if(name_input[left + 1] === " "){
+            for(let i = 0; i < name_input.length; i++){
+                if(name_input[i] !== " "){
+                    is = 1;
+                }
+            }
+        }
+    }
+    else{
+        for(let i = 0; i < name_input.length; i++){
+            if(name_input[i] !== " "){
+                is = 1;
+            }
+        }
+    }
+
+    return is;
+}
+/*Final register user functions */
+
+
+/*Start Keep Active Status functions */
+    
+function keepActiveStatus(){
     const promise = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/status",{name:name_input})
 
-    promise.then(manteveComSucesso);
-    promise.catch(manteveComNaoSucesso);
+    promise.catch(keepActiveStatusError);
 }
 
-function manteveComSucesso(){
+function keepActiveStatusError(error){
+    if(error.response.status === 400){
+        alert("Ops! problema no servidor, estamos resolvendo isso");
+    }
 }
-function manteveComNaoSucesso(error){
-}
+/*Final Keep Active Status functions */
 
 
-function enviarMensagem(){
+/*Start Send Menssage Functions */
+
+function sendMessage(){
     
     let message = document.querySelector("textarea");
 
-    if(message.value === ""){
+    if(!isValidMessage(message.value)){
+
+        message.value = "";
+
         return;
     }
 
@@ -149,24 +223,94 @@ function enviarMensagem(){
 
     message.value = "";
     
-    promise.then(enviouComSucesso);
-    promise.catch(erroAoEnviar);
+    promise.then(sendMessageSuccess);
+    promise.catch(sendMessageError);
 }
 
-function enviouComSucesso(){
-    console.log("mensagem, enviada");
+function sendMessageSuccess(){
     let message = document.querySelector("textarea");
     message.value = "";
     rendezirarChat();
 }
-function erroAoEnviar(erro){
-    console.log(erro.response.status);
-    console.log("erro ao enviar essa mensagem, desconectado");
+function sendMessageError(erro){
+    alert("erro ao enviar essa mensagem, desconectado");
     window.location.reload()
 }
 
 
-/* Side bar functions*/
+function isValidMessage(message){
+    let is = 0;
+    let left = message.indexOf('<');
+    let right = message.indexOf('>');
+    
+    if(message[0] === "<" && message[message.length - 1] === ">" && message[0] === "<" && message[1] !== " "){
+        return is;
+    }
+
+    if(left !== -1 && right !== -1){
+        console.log("Esquerda pa direita")
+        for(let i = 0; i < left; i++){
+            console.log(message[i])
+            if(message[i] !== " "){
+                is = 1;
+            }
+        }
+        console.log("Direita pa direita")
+        for(let i = right + 1; i < message.length; i++){
+            console.log(message[i])
+            if(message[i] !== " "){
+                is = 1;
+            }
+        }
+
+        if(!is && message[left + 1] === " "){
+            for(let i = 0; i < message.length; i++){
+                if(message[i] !== " "){
+                    is = 1;
+                }
+            }
+        }
+    }
+    else if(left !== -1 && right === -1){
+        if(message[left + 1] === " "){
+            for(let i = 0; i < message.length; i++){
+                if(message[i] !== " "){
+                    is = 1;
+                }
+            }
+        }
+    }
+    else{
+        if(message === "" || message === "\n"){
+            return is;
+        }
+        
+        for(let i = 0; i < message.length; i++){
+            if(message[i] !== " " && message[i] !== "\n"){
+                is = 1;
+            }
+            if(message[i] === "\n"){
+                message[i] = " ";
+            }
+        }
+    }
+
+    return is;
+}
+/*Final Send Menssage Functions */
+
+
+/* Start Side bar functions */
+
+function openSideBar(){
+    const darkness = document.querySelector(".darkness")
+    const sideBar = document.querySelector(".side-bar")
+    const visibility = document.querySelector(".visibility")
+
+    darkness.classList.remove("suma");
+    sideBar.classList.remove("suma");
+    visibility.classList.remove("suma");
+}
 
 function choicePeople(elemento){
     let selecionado = document.querySelector(".peoples .linha.selecionada") 
@@ -194,39 +338,6 @@ function choiceVisibily(elemento){
     type_message = elemento.innerText;
 }   
 
-
-function openSideBar(){
-    const darkness = document.querySelector(".darkness")
-    const sideBar = document.querySelector(".side-bar")
-    const visibility = document.querySelector(".visibility")
-    darkness.classList.remove("suma");
-    sideBar.classList.remove("suma");
-    visibility.classList.remove("suma");
-}
-
-
-function usersActive(){
-    const promise = axios.get(PARTICIPANTS_URL);
-    promise.then(sucessoAoBuscarUsers);
-    promise.catch(falhaAoBuscarUsers);
-}
-
-function sucessoAoBuscarUsers(answer){
-    let listUsersActives = document.querySelector(".peoples");
-    listUsersActives.innerHTML = `<li class="linha" onclick="choicePeople(this)"><ion-icon name="people"></ion-icon>Todos <ion-icon class="check desaparecido" name="checkmark-outline"></ion-icon></li>`;
-
-    for(let i = 0; i < answer.data.length; i++){
-
-        listUsersActives.innerHTML += `<li class="linha" onclick="choicePeople(this)"><ion-icon name="people"></ion-icon>${answer.data[i].name} <ion-icon class="check desaparecido" name="checkmark-outline"></ion-icon></li>`
-    }
-    
-}
-
-function falhaAoBuscarUsers(error){
-    console.log("Ops! Ocorreu o um erro no servidor, estamos consertando isso.");
-    console.log(eŕror)
-}
-
 function closeSideBar(){
     const sideBar = document.querySelector(".side-bar");
     const header = document.querySelector(".header");
@@ -236,6 +347,38 @@ function closeSideBar(){
     
     showInforMessage(people, type_message);
 }
+
+
+function usersActive(){
+    const promise = axios.get(PARTICIPANTS_URL);
+    promise.then(usersActiveSucess);
+    promise.catch(usersActiveError);
+}
+
+function usersActiveSucess(answer){
+    let listUsersActives = document.querySelector(".peoples");
+
+    listUsersActives.innerHTML = `<li class="linha padrao" onclick="choicePeople(this)"><ion-icon name="people"></ion-icon>Todos <ion-icon class="check desaparecido" name="checkmark-outline"></ion-icon></li>`;
+
+    for(let i = 0; i < answer.data.length; i++){
+
+        if(answer.data[i].name === people){
+            listUsersActives.innerHTML += `<li class="linha selecionada" onclick="choicePeople(this)"><ion-icon name="person-circle"></ion-icon>${answer.data[i].name} <ion-icon class="check desaparecido" name="checkmark-outline"></ion-icon></li>`
+        }
+        else{
+            listUsersActives.innerHTML += `<li class="linha" onclick="choicePeople(this)"><ion-icon name="person-circle"></ion-icon>${answer.data[i].name} <ion-icon class="check desaparecido" name="checkmark-outline"></ion-icon></li>`
+        }
+    }
+    
+}
+
+function usersActiveError(error){
+    if(error.response.status === 400){
+        alert("Ops! Ocorreu o um erro no servidor, estamos consertando isso.");
+    }
+}
+
+/*Final side bar functions */
 
 function showInforMessage(user, type_message){
     const infoVisibility = document.querySelector(".info-visibility");
@@ -257,7 +400,7 @@ let texto = document.querySelector("textarea");
 texto.addEventListener('focus', function() {
     texto.addEventListener('keydown', function (event) {
         if (event.keyCode === 13){
-            enviarMensagem();
+            sendMessage();
         }
     });
 });

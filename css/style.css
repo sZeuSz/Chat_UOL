@@ -184,7 +184,7 @@ ul{
 li{
     overflow-wrap: break-word;
     position: relative;
-}  
+}
 
 li ion-icon{
     height: 25px;
@@ -222,15 +222,16 @@ li ion-icon{
 }
 
 .info-visibility{
-    /* margin-top: 5px; */
     margin-left: 26px;
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
     font-weight: 300;
     font-style: normal;
     color: #696969;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
-
 
 .loading{
     height: 140px;
