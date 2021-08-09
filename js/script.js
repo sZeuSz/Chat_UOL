@@ -17,8 +17,6 @@ function tratarSucesso(answer){
     const mensagens_atualizadas = answer.data;
 
     const lista_de_mensagens = document.querySelector(".content");
-
-    // last_message = document.querySelector('.content div:last-child');
     
     lista_de_mensagens.innerHTML = "";
     
@@ -110,16 +108,12 @@ function isValidName(name_input){
     }
 
     if(left !== -1 && right !== -1){
-        console.log("Esquerda pa direita")
         for(let i = 0; i < left; i++){
-            console.log(name_input[i])
             if(name_input[i] !== " "){
                 is = 1;
             }
         }
-        console.log("Direita pa direita")
         for(let i = right + 1; i < name_input.length; i++){
-            console.log(name_input[i])
             if(name_input[i] !== " "){
                 is = 1;
             }
@@ -202,6 +196,14 @@ function sendMessage(){
             type: "message"
         }
     }
+    else if(people !== "" && type_message === ""){
+        inforMessage = {
+            from: name_input,
+            to: people,
+            text: message.value,
+            type: "message"
+        }
+    }
     else if(people === "" && type_message === "Reservadamente"){
         inforMessage = {
             from: name_input,
@@ -248,16 +250,12 @@ function isValidMessage(message){
     }
 
     if(left !== -1 && right !== -1){
-        console.log("Esquerda pa direita")
         for(let i = 0; i < left; i++){
-            console.log(message[i])
             if(message[i] !== " "){
                 is = 1;
             }
         }
-        console.log("Direita pa direita")
         for(let i = right + 1; i < message.length; i++){
-            console.log(message[i])
             if(message[i] !== " "){
                 is = 1;
             }
@@ -345,6 +343,7 @@ function closeSideBar(){
     darkness.classList.add("suma");
     sideBar.classList.add("suma");
     
+    
     showInforMessage(people, type_message);
 }
 
@@ -386,21 +385,27 @@ function showInforMessage(user, type_message){
     infoVisibility.classList.remove("suma");
 
     if(user !== "" && type_message !== ""){
-        infoVisibility.innerText = `Enviando para ${user} (${type_message})`
+        infoVisibility.innerText = `Enviando para ${user} (${type_message})`;
     }
     else if(user !== "" && type_message === ""){
-        infoVisibility.innerText = `Enviando para ${user} (Público)`
+        infoVisibility.innerText = `Enviando para ${user} (Público)`;
+        type_message = "Público";
     }
     else if(user === "" && type_message !== ""){
-        infoVisibility.innerText = `Enviando para Todos (${type_message})`
+        infoVisibility.innerText = `Enviando para Todos (${type_message})`;
     }
 }
 
 let texto = document.querySelector("textarea");
-texto.addEventListener('focus', function() {
-    texto.addEventListener('keydown', function (event) {
-        if (event.keyCode === 13){
-            sendMessage();
-        }
-    });
+texto.addEventListener('keydown', function(e){
+    if (e.keyCode == 13) {
+        sendMessage();
+    }
+});
+
+let input = document.querySelector("input");
+input.addEventListener('keydown', function(e){
+    if (e.keyCode == 13) {
+        registerUser();
+    }
 });
