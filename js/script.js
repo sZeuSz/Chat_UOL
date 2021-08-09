@@ -6,7 +6,6 @@ let people = "";
 let type_message = "";
 let name_input;
 let last_message;
-let cont = 0;
 
 function rendezirarChat(){
 
@@ -19,9 +18,8 @@ function tratarSucesso(answer){
 
     const lista_de_mensagens = document.querySelector(".content");
 
-    last_message = document.querySelector('.content div:last-child');
+    // last_message = document.querySelector('.content div:last-child');
     
-
     lista_de_mensagens.innerHTML = "";
     
     for(let i = 0; i < mensagens_atualizadas.length; i++){
@@ -39,16 +37,19 @@ function tratarSucesso(answer){
         else if(mensagens_atualizadas[i].type === "private_message"){
             if(mensagens_atualizadas[i].from === name_input || mensagens_atualizadas[i].to === name_input){
                 lista_de_mensagens.innerHTML += `<div class="${mensagens_atualizadas[i].type}-message style-all-message">
-                                            <p class="mensagem"><span class="timer">(${mensagens_atualizadas[i].time})</span> reservadamente<strong>${mensagens_atualizadas[i].from}</strong> para <strong>${mensagens_atualizadas[i].to}</strong>: ${mensagens_atualizadas[i].text}</p>
+                                            <p class="mensagem"><span class="timer">(${mensagens_atualizadas[i].time})</span> <strong>${mensagens_atualizadas[i].from}</strong> reservadamente para <strong>${mensagens_atualizadas[i].to}</strong>: ${mensagens_atualizadas[i].text}</p>
                                          </div>`
             }
         }
-    }
+    }    
 
-    if(answer.data[answer.data.length - 1] !== last_message || last_message === null){
-        box_message = document.querySelector('.content div:last-child');
+    let box_message = document.querySelector(".style-all-message:nth-last-child(-n+1) p:nth-last-child(-n+1)");
+    console.log(box_message.innerHTML);
+    console.log(last_message);
+    console.log(box_message === last_message)
+    if(box_message !== last_message){
+        last_message = box_message.innerHTML;
         box_message.scrollIntoView(true);
-        last_message = box_message;
     }
 }
 
