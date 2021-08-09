@@ -5,20 +5,15 @@ const STATUS_URL = "https://mock-api.bootcamp.respondeai.com.br/api/v3/uol/statu
 let people = "";
 let type_message = "";
 let name_input;
+
 function rendezirarChat(){
 
     const promise = axios.get(MESSAGES_URL);
-    // console.log(promise)
+
     promise.then(tratarSucesso);
 }
 function tratarSucesso(answer){
-    //private_message
-    console.log("sucesso")
     const mensagens_atualizadas = answer.data;
-    // console.log(mensagens_atualizadas.length)
-    // console.log(mensagens_atualizadas[0]);
-    // console.log(mensagens_atualizadas[0].type);
-    // console.log(mensagens_atualizadas[0].text);
 
     const lista_de_mensagens = document.querySelector(".content");
     
@@ -28,13 +23,11 @@ function tratarSucesso(answer){
     for(let i = 0; i < mensagens_atualizadas.length; i++){
 
         if(mensagens_atualizadas[i].type === "status"){
-            // console.log("eh status")
             lista_de_mensagens.innerHTML += `<div class="${mensagens_atualizadas[i].type}-message style-all-message">
                                             <p class="mensagem"><span class="timer">(${mensagens_atualizadas[i].time})</span> <strong>${mensagens_atualizadas[i].from}</strong> ${mensagens_atualizadas[i].text}</p>
                                          </div>`
         }
         else if(mensagens_atualizadas[i].type === "message"){
-            // console.log("eh mensagem")
             lista_de_mensagens.innerHTML += `<div class="${mensagens_atualizadas[i].type}-message style-all-message">
                                             <p class="mensagem"><span class="timer">(${mensagens_atualizadas[i].time})</span> <strong>${mensagens_atualizadas[i].from}</strong> para <strong>${mensagens_atualizadas[i].to}</strong>: ${mensagens_atualizadas[i].text}</p>
                                          </div>`
@@ -52,12 +45,10 @@ function tratarSucesso(answer){
 
     box_message.scrollIntoView(true);
 }
-// rendezirarChat();
 
 
 
 function entrar(){
-    // console.log("entroouu")
     const button = document.querySelector(".button").classList.toggle("suma");
     const input = document.querySelector(".user-name").classList.toggle("suma");
     const carregando = document.querySelector(".loading").classList.toggle("suma");
@@ -69,11 +60,9 @@ function entrar(){
 }
 
 function entrouComSucesso(resposta){
-    console.log("sucesso")
     document.querySelector(".visibility").classList.toggle("suma");
     document.querySelector(".header").classList.toggle("suma");
     document.querySelector(".fixed-send-message").classList.toggle("suma");
-    //box_message = document.querySelector("textarea");
 
     rendezirarChat();
     usersActive();
@@ -97,7 +86,6 @@ function erroAoEntrar(error){
     if(error.response.status === 400){
         alert("Nome de usuário já existe")
     }
-    console.log("deu ruim", error);
 }
 
 
@@ -109,16 +97,18 @@ function manterOnline(){
 }
 
 function manteveComSucesso(){
-    console.log("mais 4 segundos");
 }
 function manteveComNaoSucesso(error){
-    console.log(error);
 }
 
 
 function enviarMensagem(){
     
     let message = document.querySelector("textarea");
+
+    if(message.value === ""){
+        return;
+    }
 
     let inforMessage;
 
@@ -138,12 +128,12 @@ function enviarMensagem(){
             type: "message"
         }
     }
-    else if(people === "" && type_message !== ""){
+    else if(people === "" && type_message === "Reservadamente"){
         inforMessage = {
             from: name_input,
             to: "Todos",
             text: message.value,
-            type: type_message  
+            type: "private_message"  
         }
     }
     else{
@@ -165,7 +155,8 @@ function enviarMensagem(){
 
 function enviouComSucesso(){
     console.log("mensagem, enviada");
-    
+    let message = document.querySelector("textarea");
+    message.value = "";
     rendezirarChat();
 }
 function erroAoEnviar(erro){
@@ -178,7 +169,6 @@ function erroAoEnviar(erro){
 /* Side bar functions*/
 
 function choicePeople(elemento){
-    console.log("Escolhi um caba");
     let selecionado = document.querySelector(".peoples .linha.selecionada") 
     
     if(selecionado !== null){
@@ -187,25 +177,20 @@ function choicePeople(elemento){
     }
     elemento.classList.add("selecionada");
     selecionado = document.querySelector(".peoples .linha.selecionada .check").classList.add("desaparecido") 
-
-    // console.log(elemento.innerText)
     people = elemento.innerText;
 }
 
-function choiceVisibily(elemento){
-    console.log("Escolhi um status");   
-    
+function choiceVisibily(elemento){    
     let selecionado = document.querySelector(".visibility .linha.selecionada") 
-
-    console.log(selecionado )
     
     if(selecionado !== null){
         selecionado = document.querySelector(".visibility .linha.selecionada .check").classList.remove("desaparecido");
             document.querySelector(".visibility .linha.selecionada").classList.remove("selecionada");
     }
+
     elemento.classList.add("selecionada");
+
     selecionado = document.querySelector(".visibility .linha.selecionada .check").classList.add("desaparecido") 
-    console.log(elemento.innerText);
     type_message = elemento.innerText;
 }   
 
@@ -221,22 +206,14 @@ function openSideBar(){
 
 
 function usersActive(){
-    console.log("ôvo deixar os usuarios online aqui na side, wait")
-
     const promise = axios.get(PARTICIPANTS_URL);
     promise.then(sucessoAoBuscarUsers);
     promise.catch(falhaAoBuscarUsers);
 }
 
 function sucessoAoBuscarUsers(answer){
-    console.log("deu");
-
     let listUsersActives = document.querySelector(".peoples");
     listUsersActives.innerHTML = `<li class="linha" onclick="choicePeople(this)"><ion-icon name="people"></ion-icon>Todos <ion-icon class="check desaparecido" name="checkmark-outline"></ion-icon></li>`;
-
-    console.log(listUsersActives);
-
-    console.log(answer.data)
 
     for(let i = 0; i < answer.data.length; i++){
 
@@ -249,8 +226,6 @@ function falhaAoBuscarUsers(error){
     console.log("Ops! Ocorreu o um erro no servidor, estamos consertando isso.");
     console.log(eŕror)
 }
-
-// usersActive();
 
 function closeSideBar(){
     const sideBar = document.querySelector(".side-bar");
@@ -267,7 +242,6 @@ function showInforMessage(user, type_message){
 
     infoVisibility.classList.remove("suma");
 
-    // console.log(infoVisibility.innerText);
     if(user !== "" && type_message !== ""){
         infoVisibility.innerText = `Enviando para ${user} (${type_message})`
     }
@@ -279,7 +253,7 @@ function showInforMessage(user, type_message){
     }
 }
 
-var texto = document.querySelector("textarea");
+let texto = document.querySelector("textarea");
 texto.addEventListener('focus', function() {
     texto.addEventListener('keydown', function (event) {
         if (event.keyCode === 13){
